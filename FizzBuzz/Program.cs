@@ -13,7 +13,7 @@ namespace FizzBuzz
             for (int currentNo = 1; currentNo <= maxFizzBuzz; currentNo++)
             {
                 StringBuilder fizzBuzzOutput = new StringBuilder();
-                for(int iterator = 0; iterator<fizzBuzzCheckers.Length; iterator++ )
+                foreach(int iterator in selectedRules)
                 {
                     fizzBuzzOutput = FizzBuzzAppend(fizzBuzzOutput, fizzBuzzWords[iterator], currentNo,
                         fizzBuzzCheckers[iterator]);
@@ -27,7 +27,6 @@ namespace FizzBuzz
                 {
                     Console.WriteLine(fizzBuzzOutput);
                 }
-                //break;
             }
         }
 
@@ -36,10 +35,8 @@ namespace FizzBuzz
             return (inputNo % multiplier == 0);
         }
 
-        private static int EnterNo()
+        private static int CheckInt(string numInput)
         {
-            Console.WriteLine("Please enter the number you would like to fizz buzz up to");
-            string numInput = Console.ReadLine();
             int numOutput;
             while (true)
             {
@@ -54,10 +51,57 @@ namespace FizzBuzz
                 }
             }
         }
-        
+        private static int EnterNo()
+        {
+            Console.WriteLine("Please enter the number you would like to fizz buzz up to");
+            string numInput = Console.ReadLine();
+            return CheckInt(numInput);
+        }
+
         private static int[] EnterRules()
         {
+            //FIX LATER, currently if you enter an input with no commas it gets stuck in an "enter an integer" loop
+            Console.WriteLine("Please enter which rules you'd like to use, separated by commas!\n " +
+                              "1)Fizz if the number is a multiple of 3\n " +
+                              "2)Buzz if the number is a multiple of 5\n " +
+                              "3)Bang if the number is a multiple of 7\n " +
+                              "4)Bong if the number is a multiple of 11, and all other text is removed\n " +
+                              "5)Fezz if the number is a multiple of 13, this is appended in front of the first B or at the end if there are no B's. Occurs after \"Bongs\" have been processed\n " +
+                              "6)Reverses the order of all other words if the number is a multiple of 17");
+            string numInput = Console.ReadLine();
+            int checkedInt;
+            while (true)
+            {
+                if (numInput.Contains(","))
+                {
+                    string[] splitNumInputs = numInput.Split(",");
+                    //check through and make sure all entries are numbers between 1 and 6
+                    int[] userRules = new int[splitNumInputs.Length];
+                    foreach (string iterate in splitNumInputs)
+                    {
+                        checkedInt = CheckInt(iterate);
+                        if (checkedInt.GetType() == typeof(int) && checkedInt>0 && checkedInt<7)
+                        {
+                            userRules[Array.IndexOf(splitNumInputs, iterate)] = int.Parse(iterate)-1;
+                        }
+                    }
+
+                    return userRules;
+                }
+                else
+                {
+                    checkedInt = CheckInt(numInput);
+                    if (checkedInt.GetType() == typeof(int) && checkedInt>0 && checkedInt<7)
+                    {
+                        return new []{checkedInt-1};
+                    }
+                }
+                Console.WriteLine("Invalid input. Please enter a list of integers separated by commas");
+                numInput = Console.ReadLine();
+            }
+
             return new[] {0};
+            
         }
         
         private static StringBuilder FizzBuzzAppend(StringBuilder fizzBuzzCurrent, string newWord, int currentNo ,int multiplier)
