@@ -6,7 +6,6 @@ namespace FizzBuzz
     {
         static void Main(string[] args)
         {
-            int caseChecker = 0;
             for (int currentNo = 1; currentNo <= 100; currentNo++)
             {
                 StringBuilder fizzBuzzOutput = new StringBuilder();
