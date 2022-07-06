@@ -72,7 +72,6 @@ namespace FizzBuzz
 
         private static int[] EnterRules()
         {
-            //FIX LATER, currently writes fizz an extra time for every non valid integer input in the list
             Console.WriteLine("Please enter which rules you'd like to use, separated by commas!\n " +
                               "1)Fizz if the number is a multiple of 3\n " +
                               "2)Buzz if the number is a multiple of 5\n " +
