@@ -9,15 +9,14 @@ namespace FizzBuzz
         {
             int maxFizzBuzz = EnterNo();
             int[] selectedRules = EnterRules();
-            int[] fizzBuzzCheckers = { 3, 5, 7, 11, 13, 17 };
-            string[] fizzBuzzWords = { "Fizz", "Buzz", "Bang", "Bong", "Fezz", "placeholder"};
+            UserRule rule;
             for (int currentNo = 1; currentNo <= maxFizzBuzz; currentNo++)
             {
                 StringBuilder fizzBuzzOutput = new StringBuilder();
                 foreach(int iterator in selectedRules)
                 {
-                    fizzBuzzOutput = FizzBuzzAppend(fizzBuzzOutput, fizzBuzzWords[iterator], currentNo,
-                        fizzBuzzCheckers[iterator]);
+                    rule = new UserRule(iterator);
+                    fizzBuzzOutput = FizzBuzzAppend(fizzBuzzOutput, currentNo, rule);
                 }
 
                 if (fizzBuzzOutput.Equals(""))
@@ -114,21 +113,21 @@ namespace FizzBuzz
             return new[] { 0, 1, 2, 3, 4, 5 };
         }
         
-        private static StringBuilder FizzBuzzAppend(StringBuilder fizzBuzzCurrent, string newWord, int currentNo ,int multiplier)
+        private static StringBuilder FizzBuzzAppend(StringBuilder fizzBuzzCurrent, int currentNo ,UserRule rule)
         {
-            if (IsMultiple(currentNo, multiplier))
+            if (IsMultiple(currentNo, rule.Replacer))
             {
-                switch (multiplier)
+                switch (rule.Replacer)
                 {
                     default:
-                        fizzBuzzCurrent.Append(newWord);
+                        fizzBuzzCurrent.Append(rule.Text);
                         break;
                     case 11:
                         fizzBuzzCurrent = new StringBuilder();
-                        fizzBuzzCurrent.Append(newWord);
+                        fizzBuzzCurrent.Append(rule.Text);
                         break; 
                     case 13:
-                        fizzBuzzCurrent.Insert(BIndex(fizzBuzzCurrent, 'B'), newWord);
+                        fizzBuzzCurrent.Insert(BIndex(fizzBuzzCurrent, 'B'), rule.Text);
                         break;
                     case 17:
                         //reverse order of fizzes, buzzes etc.
@@ -179,6 +178,36 @@ namespace FizzBuzz
             return reversedString;
 
         }
-        
+    }
+    class UserRule
+    {
+        int[] fizzBuzzCheckers = { 3, 5, 7, 11, 13, 17 };
+        string[] fizzBuzzWords = { "Fizz", "Buzz", "Bang", "Bong", "Fezz", "placeholder"};
+        public int CurrentRule { get; set; }
+        public int Replacer { get; set; }
+        public string Text { get; set; }
+        public string Position { get; set; }
+        public char Letter { get; set; }
+
+        public UserRule(int currentRule)
+        {
+            Text = fizzBuzzWords[currentRule];
+            Replacer = fizzBuzzCheckers[currentRule];
+            
+        }
+
+        public UserRule(int replacer, string text, string position)
+        {
+            Replacer = replacer;
+            Text = text;
+            Position = position;
+        }
+        public UserRule(int replacer, string text, string position, char letter)
+        {
+            Replacer = replacer;
+            Text = text;
+            Position = position;
+            Letter = letter;
+        }
     }
 }
