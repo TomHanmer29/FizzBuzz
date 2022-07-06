@@ -7,9 +7,7 @@ namespace FizzBuzz
     {
         static void Main(string[] args)
         {
-            int maxFizzBuzz = EnterNo();
-            int[] selectedRules = EnterRules();
-            FizzBuzzPrint(maxFizzBuzz, selectedRules);
+            FizzBuzzPrint(EnterNo(),EnterRules());
         }
 
         private static void FizzBuzzPrint(int maxFizzBuzz, int[] selectedRules)
