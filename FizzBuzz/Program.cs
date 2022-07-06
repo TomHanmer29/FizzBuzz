@@ -9,6 +9,11 @@ namespace FizzBuzz
         {
             int maxFizzBuzz = EnterNo();
             int[] selectedRules = EnterRules();
+            FizzBuzzPrint(maxFizzBuzz, selectedRules);
+        }
+
+        private static void FizzBuzzPrint(int maxFizzBuzz, int[] selectedRules)
+        {
             UserRule rule;
             for (int currentNo = 1; currentNo <= maxFizzBuzz; currentNo++)
             {
@@ -29,7 +34,7 @@ namespace FizzBuzz
                 }
             }
         }
-
+        
         private static bool IsMultiple(int inputNo, int multiplier)
         {
             return (inputNo % multiplier == 0);
