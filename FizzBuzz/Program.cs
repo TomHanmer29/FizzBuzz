@@ -80,7 +80,8 @@ namespace FizzBuzz
                               "3)Bang if the number is a multiple of 7\n " +
                               "4)Bong if the number is a multiple of 11, and all other text is removed\n " +
                               "5)Fezz if the number is a multiple of 13, this is appended in front of the first B or at the end if there are no B's. Occurs after \"Bongs\" have been processed\n " +
-                              "6)Reverses the order of all other words if the number is a multiple of 17");
+                              "6)Reverses the order of all other words if the number is a multiple of 17\n " +
+                              "7)Custom user rule");
             string numInput = Console.ReadLine();
             int checkedInt;
             while(true)
@@ -92,6 +93,11 @@ namespace FizzBuzz
                     foreach (string entry in splitNumInputsArr)
                     {
                         checkedInt = CheckInt(entry);
+                        if (checkedInt == 7)
+                        {
+                            //still need to get this back into the main part of the program:
+                            CustomRulePrompt();
+                        }
                         if (checkedInt > 0 && checkedInt < 7)
                         {
                             splitNumInputs.Add(int.Parse(entry)-1);
@@ -103,6 +109,13 @@ namespace FizzBuzz
                 else
                 {
                     checkedInt = CheckInt(numInput);
+                    if (checkedInt == 7)
+                    {
+                        //still need to get this back into the main part of the program:
+                        CustomRulePrompt();
+                        //just a placeholder return so I could test
+                        return new[] { 6 };
+                    }
                     if (checkedInt.GetType() == typeof(int) && checkedInt > 0 && checkedInt < 7)
                     {
                         return new[] { checkedInt - 1 };
@@ -136,11 +149,55 @@ namespace FizzBuzz
                         //reverse order of fizzes, buzzes etc.
                         fizzBuzzCurrent = CapitalWordReverser(fizzBuzzCurrent);
                         break;
+                    case 0:
+                        //custom user rule:
+                        fizzBuzzCurrent = CustomRule(fizzBuzzCurrent, rule);
+                        break;
                 }
             }
             return fizzBuzzCurrent;
         }
 
+        private static UserRule CustomRulePrompt()
+        {
+            //number to replace? OR other function?
+            Console.WriteLine("Which number's multiples would you like to replace?");
+            int replacer = CheckIntErr(Console.ReadLine());
+            //word to replace it with?
+            Console.WriteLine("Which word would you like to replace them with?");
+            string text = Console.ReadLine();
+            //where to insert (after/before/between current words)?
+            Console.WriteLine("Would you like to insert the new words\n1)after\n2)before\n3)between\ncurrent text?");
+            int position = -1;
+            while (true)
+            {
+                position = CheckIntErr(Console.ReadLine());
+                if (position == 3)
+                {
+                    //if between, type the first letter of the current word you would like to insert between.
+                    //MAKE ONLY ACCEPT SINGLE CHARACTERS
+                    Console.WriteLine("Type the first letter of the current word (e.g. \"F\" for Fizz, etc.) you would like to insert between");
+                    char userChar = char.Parse(Console.ReadLine());
+                    return new UserRule(replacer, text, position, userChar);
+                }
+                else if (position == 1 || position ==2)
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Please enter a number between 1 and 3");
+                }
+            }
+            
+            
+            return new UserRule(replacer, text, position);
+        }
+
+        private static StringBuilder CustomRule(StringBuilder fizzBuzzCurrent,  UserRule rule)
+        {
+            return new StringBuilder();
+        }
         private static int BIndex(StringBuilder fizzBuzzCurrent, char inputLetter)
         //This finds the index of the first specified capital letter in the input StringBuilder
         {
@@ -184,12 +241,11 @@ namespace FizzBuzz
     }
     class UserRule
     {
-        int[] fizzBuzzCheckers = { 3, 5, 7, 11, 13, 17 };
-        string[] fizzBuzzWords = { "Fizz", "Buzz", "Bang", "Bong", "Fezz", "placeholder"};
-        public int CurrentRule { get; set; }
+        int[] fizzBuzzCheckers = { 3, 5, 7, 11, 13, 17, 0};
+        string[] fizzBuzzWords = { "Fizz", "Buzz", "Bang", "Bong", "Fezz", "reverse", "custom"};
         public int Replacer { get; set; }
         public string Text { get; set; }
-        public string Position { get; set; }
+        public int Position { get; set; }
         public char Letter { get; set; }
 
         public UserRule(int currentRule)
@@ -199,13 +255,13 @@ namespace FizzBuzz
             
         }
 
-        public UserRule(int replacer, string text, string position)
+        public UserRule(int replacer, string text, int position)
         {
             Replacer = replacer;
             Text = text;
             Position = position;
         }
-        public UserRule(int replacer, string text, string position, char letter)
+        public UserRule(int replacer, string text, int position, char letter)
         {
             Replacer = replacer;
             Text = text;
