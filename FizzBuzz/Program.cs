@@ -13,12 +13,29 @@ namespace FizzBuzz
         private static void FizzBuzzPrint(int maxFizzBuzz, int[] selectedRules)
         {
             UserRule rule;
+            ArrayList customUserRules = new ArrayList();
+            foreach (int entry in selectedRules)
+            {
+                if (entry == 6)
+                {
+                    customUserRules.Add(CustomRulePrompt());
+                }
+            }
             for (int currentNo = 1; currentNo <= maxFizzBuzz; currentNo++)
             {
                 StringBuilder fizzBuzzOutput = new StringBuilder();
                 foreach(int iterator in selectedRules)
                 {
-                    rule = new UserRule(iterator);
+                    if (iterator == 6)
+                    {
+                        //for the i'th 6 pass in the ith entry of customUserRules
+                        //this is just here ATM so the code doesnt break :)
+                        rule = new UserRule(iterator);
+                    }
+                    else
+                    {
+                        rule = new UserRule(iterator);
+                    }
                     fizzBuzzOutput = FizzBuzzAppend(fizzBuzzOutput, currentNo, rule);
                 }
 
@@ -93,12 +110,7 @@ namespace FizzBuzz
                     foreach (string entry in splitNumInputsArr)
                     {
                         checkedInt = CheckInt(entry);
-                        if (checkedInt == 7)
-                        {
-                            //still need to get this back into the main part of the program:
-                            CustomRulePrompt();
-                        }
-                        if (checkedInt > 0 && checkedInt < 7)
+                        if (checkedInt > 0 && checkedInt < 8)
                         {
                             splitNumInputs.Add(int.Parse(entry)-1);
                         }
@@ -109,14 +121,7 @@ namespace FizzBuzz
                 else
                 {
                     checkedInt = CheckInt(numInput);
-                    if (checkedInt == 7)
-                    {
-                        //still need to get this back into the main part of the program:
-                        CustomRulePrompt();
-                        //just a placeholder return so I could test
-                        return new[] { 6 };
-                    }
-                    if (checkedInt.GetType() == typeof(int) && checkedInt > 0 && checkedInt < 7)
+                    if (checkedInt.GetType() == typeof(int) && checkedInt > 0 && checkedInt < 8)
                     {
                         return new[] { checkedInt - 1 };
                     }
@@ -176,7 +181,7 @@ namespace FizzBuzz
                 {
                     //if between, type the first letter of the current word you would like to insert between.
                     //MAKE ONLY ACCEPT SINGLE CHARACTERS
-                    Console.WriteLine("Type the first letter of the current word (e.g. \"F\" for Fizz, etc.) you would like to insert between");
+                    Console.WriteLine("Type the first letter of the current word (e.g. \"F\" for Fizz, etc.) you would like to insert the new word before");
                     char userChar = char.Parse(Console.ReadLine());
                     return new UserRule(replacer, text, position, userChar);
                 }
