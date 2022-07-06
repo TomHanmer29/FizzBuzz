@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections;
+using System.Text;
 
 namespace FizzBuzz
 {
@@ -35,7 +36,7 @@ namespace FizzBuzz
             return (inputNo % multiplier == 0);
         }
 
-        private static int CheckInt(string numInput)
+        private static int CheckIntErr(string numInput)
         {
             int numOutput;
             while (true)
@@ -51,16 +52,27 @@ namespace FizzBuzz
                 }
             }
         }
+        
+        private static int CheckInt(string numInput)
+        {
+            int numOutput;
+
+            if (int.TryParse(numInput, out numOutput))
+            {
+                return numOutput;
+            }
+            return -1;
+        }
         private static int EnterNo()
         {
             Console.WriteLine("Please enter the number you would like to fizz buzz up to");
             string numInput = Console.ReadLine();
-            return CheckInt(numInput);
+            return CheckIntErr(numInput);
         }
 
         private static int[] EnterRules()
         {
-            //FIX LATER, currently if you enter an input with no commas it gets stuck in an "enter an integer" loop
+            //FIX LATER, currently writes fizz an extra time for every non valid integer input in the list
             Console.WriteLine("Please enter which rules you'd like to use, separated by commas!\n " +
                               "1)Fizz if the number is a multiple of 3\n " +
                               "2)Buzz if the number is a multiple of 5\n " +
@@ -70,38 +82,37 @@ namespace FizzBuzz
                               "6)Reverses the order of all other words if the number is a multiple of 17");
             string numInput = Console.ReadLine();
             int checkedInt;
-            while (true)
+            while(true)
             {
                 if (numInput.Contains(","))
                 {
-                    string[] splitNumInputs = numInput.Split(",");
-                    //check through and make sure all entries are numbers between 1 and 6
-                    int[] userRules = new int[splitNumInputs.Length];
-                    foreach (string iterate in splitNumInputs)
+                    string[] splitNumInputsArr = numInput.Split(",");
+                    ArrayList splitNumInputs = new ArrayList();
+                    foreach (string entry in splitNumInputsArr)
                     {
-                        checkedInt = CheckInt(iterate);
-                        if (checkedInt.GetType() == typeof(int) && checkedInt>0 && checkedInt<7)
+                        checkedInt = CheckInt(entry);
+                        if (checkedInt > 0 && checkedInt < 7)
                         {
-                            userRules[Array.IndexOf(splitNumInputs, iterate)] = int.Parse(iterate)-1;
+                            splitNumInputs.Add(int.Parse(entry)-1);
                         }
                     }
 
-                    return userRules;
+                    return (int[])splitNumInputs.ToArray(typeof(int));
                 }
                 else
                 {
                     checkedInt = CheckInt(numInput);
-                    if (checkedInt.GetType() == typeof(int) && checkedInt>0 && checkedInt<7)
+                    if (checkedInt.GetType() == typeof(int) && checkedInt > 0 && checkedInt < 7)
                     {
-                        return new []{checkedInt-1};
+                        return new[] { checkedInt - 1 };
                     }
                 }
+
                 Console.WriteLine("Invalid input. Please enter a list of integers separated by commas");
                 numInput = Console.ReadLine();
             }
-
-            return new[] {0};
             
+            return new[] { 0, 1, 2, 3, 4, 5 };
         }
         
         private static StringBuilder FizzBuzzAppend(StringBuilder fizzBuzzCurrent, string newWord, int currentNo ,int multiplier)
