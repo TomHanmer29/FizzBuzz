@@ -24,13 +24,13 @@ namespace FizzBuzz
             for (int currentNo = 1; currentNo <= maxFizzBuzz; currentNo++)
             {
                 StringBuilder fizzBuzzOutput = new StringBuilder();
+                int sixCounter = 0;
                 foreach(int iterator in selectedRules)
                 {
                     if (iterator == 6)
                     {
-                        //for the i'th 6 pass in the ith entry of customUserRules
-                        //this is just here ATM so the code doesnt break :)
-                        rule = new UserRule(iterator);
+                        rule = (UserRule) customUserRules[sixCounter];
+                        sixCounter++;
                     }
                     else
                     {
